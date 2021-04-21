@@ -1,0 +1,35 @@
+{
+  "name": "sfc-project",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "db:init": "mysql -u root -p < ./src/models/sql/db_init.sql",
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "debug": "~2.6.9",
+    "dotenv": "8.2.0",
+    "escape-json-node": "^2.0.0",
+    "express": "^4.16.4",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.9.2",
+    "http-errors": "~1.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.2",
+    "mysql": "^2.17.1",
+    "mysql2": "^2.1.0",
+    "passport": "0.4.1",
+    "passport-kakao": "1.0.0",
+    "sequelize": "6.3.5",
+    "session": "^0.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
