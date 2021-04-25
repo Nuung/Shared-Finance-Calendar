@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "db:init": "mysql -u root -p < ./src/models/sql/db_init.sql",
+    "db:init": "node ./src/models/init.js",
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
     "express-validator": "^6.9.2",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.5",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "mysql": "^2.17.1",
