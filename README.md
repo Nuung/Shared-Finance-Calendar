@@ -16,10 +16,17 @@ git clone https://github.com/Nuung/Shared-Finance-Calendar.git
 cd Shared-Finance-Calendar/sfc-backend
 npm install 
 npm run db:init
+
+# db init을 했으면 collection -> schema 생성 -> insert data one 까지
+# 자동으로 해줍니다! error 없으면 mongodb에서 데이터 체크하면 됩니다!
 npm start
+
 ``` 
 
-- 이제 postman, insomnia 등의 request tool로 **GET: localhost:3000/api/test**, response json data check
+- 이제 postman, insomnia 등의 request tool로
+    - **GET: localhost:3000/api/test**
+    - **GET: localhost:3000/api/test/test**
+    - **POST: localhost:3000/api/test** body: { "data": "any thing" }
 
 ## Tech
 - one
