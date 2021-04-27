@@ -42,7 +42,6 @@ app.use(cors({  // CORS 설정
 app.use('/', indexRouter);
 
 
-
 //−−−−−−−−−−−−−−−−− Other Config Setting −−−−−−−−−−−−−−−−−//
 // catch 404 and forward to error handler
 app.use(function (req, res, next) { next(createError(404)); });
