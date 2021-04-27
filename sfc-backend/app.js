@@ -9,7 +9,7 @@ const escapeJSON = require('escape-json-node');
 
 // require Routers
 const indexRouter = require('./src/routes/index');
-
+const userRouter = require('./src/routes/user');
 
 //−−−−−−−−−−−−−−−−− APP config Setting −−−−−−−−−−−−−−−−−//
 require('dotenv').config(); // add .env file 
@@ -36,11 +36,9 @@ app.use(cors({  // CORS 설정
 // JWT WebToken
 // app.set('jwt-secret', process.env.JWT_SECRET); // set the secret key variable for jwt
 
-
-
 //−−−−−−−−−−−−−−−−− API Routing Setting −−−−−−−−−−−−−−−−−//
 app.use('/', indexRouter);
-
+app.use('/user',userRouter);
 
 //−−−−−−−−−−−−−−−−− Other Config Setting −−−−−−−−−−−−−−−−−//
 // catch 404 and forward to error handler
