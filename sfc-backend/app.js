@@ -38,7 +38,7 @@ app.use(cors({  // CORS 설정
 
 //−−−−−−−−−−−−−−−−− API Routing Setting −−−−−−−−−−−−−−−−−//
 app.use('/', indexRouter);
-app.use('/user',userRouter);
+app.use('/user', userRouter);
 
 //−−−−−−−−−−−−−−−−− Other Config Setting −−−−−−−−−−−−−−−−−//
 // catch 404 and forward to error handler

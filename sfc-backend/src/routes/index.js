@@ -56,7 +56,7 @@ function deleteData(name, query) {
 
 // READ ALL
 router.get('/api/test', function (req, res, next) {
-    Config.find({}, function (err, result) {
+    Config.find({}, function (err, result) { // SELECT * FROM config;
         if (err) {
             console.error(err);
             return res.status(500).json({ result: `Fail: ${err}` });
@@ -127,6 +127,7 @@ router.put('/api/config', function (req, res, next) {
 
 // init request
 router.delete('/api/init', function (req, res, next) {
+    // TwitchChatDumps Collection (Table)
     TwitchChatDumps.deleteMany({}, function (err, result) {
         if (err) {
             console.error(err);

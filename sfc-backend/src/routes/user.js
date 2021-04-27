@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose'); // for mongoDB
-const UserDB = require('../models/UserDB');
 const router = express.Router();
 
 // env value
@@ -19,14 +18,14 @@ mongoose.connect(`mongodb://${dbConfig.username}:${dbConfig.password}@${dbConfig
     });
 
 
-const users = require("../models/UserDB"); //load schema
+const users = require("../models/user"); //load schema
 
 //create OK
-  router.post("/create", function(req, res, next) {
-    const { name, userId,userPassword,account } = req.body;
+router.post("/create", function (req, res, next) {
+    const { name, userId, userPassword, account } = req.body;
 
     console.log(req.body);
-  
+
     var postModel = new users();
     postModel.name = name;
     postModel.userId = userId;
@@ -34,87 +33,90 @@ const users = require("../models/UserDB"); //load schema
     postModel.account = account;
 
     postModel
-      .save()
-      .then(newPost => {
-        console.log("Create 완료");
-        res.status(200).json({
-          message: "Create success",
-          data: {
-            post: newPost
-          }
+        .save()
+        .then(newPost => {
+            console.log("Create 완료");
+            res.status(200).json({
+                message: "Create success",
+                data: {
+                    post: newPost
+                }
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: err
+            });
         });
-      })
-      .catch(err => {
-        res.status(500).json({
-          message: err
-        });
-      });
-  });
-  //read all OK
-  router.get("/read", function(req, res, next) {
+});
+
+//read all OK
+router.get("/read", function (req, res, next) {
     users
-      .find()
-      .then(users => {
-        console.log("Read All 완료");
-        res.status(200).json({
-          message: "Read All success",
-          data: {
-            user: users
-          }
+        .find()
+        .then(users => {
+            console.log("Read All 완료");
+            res.status(200).json({
+                message: "Read All success",
+                data: {
+                    user: users
+                }
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: err
+            });
         });
-      })
-      .catch(err => {
-        res.status(500).json({
-          message: err
-        });
-      });
-  });
+});
+
 // Update
-router.put("/update/:user_id", function(req, res, next) {
+router.put("/update/:user_id", function (req, res, next) {
     const user_id = req.params.user_id;
     const { account } = req.body;
-  
-    users
-    .findOne({userId:user_id})
-    .then(user => {
-      if (!user) return res.status(404).json({ message: "not found" });
-      user.account = account;
 
-      user.save().then(output => {
-        console.log("Update 완료");
-        res.status(200).json({
-          message: "Update success",
-          data: {
-            user: output
-          }
+    users
+        .findOne({ userId: user_id })
+        .then(user => {
+            if (!user) return res.status(404).json({ message: "not found" });
+            user.account = account;
+
+            user.save().then(output => {
+                console.log("Update 완료");
+                res.status(200).json({
+                    message: "Update success",
+                    data: {
+                        user: output
+                    }
+                });
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: err
+            });
         });
-      });
-    })
-    .catch(err => {
-      res.status(500).json({
-        message: err
-      });
-    });
-  });
-  // Delete OK
-router.delete("/delete/:d_id", function(req, res, next) { 
+});
+
+// Delete OK
+router.delete("/delete/:d_id", function (req, res, next) {
     const d_id = req.params.d_id;
-  
-    users
-      .deleteOne({ account: d_id })
-      .then(output => {
-        if (output.n == 0)
-          return res.status(404).json({ message: "not found" });
-        console.log("Delete 완료");
-        res.status(200).json({
-          message: "Delete success"
-        });
-      })
-      .catch(err => {
-        res.status(500).json({
-          message: err
-        });
-      });
-  });
 
-  module.exports = router;
+    users
+        .deleteOne({ account: d_id })
+        .then(output => {
+            if (output.n == 0)
+                return res.status(404).json({ message: "not found" });
+            console.log("Delete 완료");
+            res.status(200).json({
+                message: "Delete success"
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: err
+            });
+        });
+});
+
+module.exports = router;
