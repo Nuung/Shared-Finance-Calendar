@@ -31,4 +31,3 @@ npm start
 ## Tech
 - one
 - two
-ㅁㅇㄻㄴㅇㄻㅇㄹ
