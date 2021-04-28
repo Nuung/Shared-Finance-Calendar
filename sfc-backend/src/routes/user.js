@@ -1,10 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose'); // for mongoDB
+const axios = require("axios").default; // for bank API request
 const router = express.Router();
 
 // env value
 const env = require('dotenv').config(); //add .env file 
 const dbConfig = JSON.parse(env.parsed.DB_INFO);
+const baseUrl = "https://openapi.wooribank.com:444"; // api
+const headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'appKey': env.parsed.APP_KEY
+}
 
 // LOCAL DB connection
 mongoose.connect(`mongodb://${dbConfig.username}:${dbConfig.password}@${dbConfig.host}:${dbConfig.port}/${dbConfig.role}`, {
@@ -12,43 +18,131 @@ mongoose.connect(`mongodb://${dbConfig.username}:${dbConfig.password}@${dbConfig
     useUnifiedTopology: true,
     useNewUrlParser: true,
 })
-    .then(() => console.log('DB Connected!'))
+    .then(() => console.log('User DB Connected!'))
     .catch(err => {
-        console.log("DB Connection Error: " + err.message);
+        console.log("User DB Connection Error: " + err.message);
     });
 
 
-const users = require("../models/user"); //load schema
+const User = require("../models/user"); //load schema
 
-//create OK
-router.post("/create", function (req, res, next) {
-    const { name, userId, userPassword, account } = req.body;
 
-    console.log(req.body);
+// Auth for Phone number
+/**
+ * @returns 인증고유 번호! auth_token!
+ */
+router.post("/phone", function (req, res, next) {
+    const options = {
+        method: 'POST',
+        url: `${baseUrl}/oai/wb/v1/login/getCellCerti`,
+        headers: headers,
+        data: {
+            dataHeader: {
+                UTZPE_CNCT_IPAD: '',
+                UTZPE_CNCT_MCHR_UNQ_ID: '',
+                UTZPE_CNCT_TEL_NO_TXT: '',
+                UTZPE_CNCT_MCHR_IDF_SRNO: '',
+                UTZ_MCHR_OS_DSCD: '',
+                UTZ_MCHR_OS_VER_NM: '',
+                UTZ_MCHR_MDL_NM: '',
+                UTZ_MCHR_APP_VER_NM: ''
+            },
+            dataBody: {
+                COMC_DIS: '1', // 통신사 1. SKT 2. KT 3. LGU+ 5. SKT(알뜰폰) 6. KT(알뜰폰) 7. LGU+(알뜰폰)
+                HP_NO: req.body.phone_number,
+                HP_CRTF_AGR_YN: 'Y', // 약관 동의 
+                FNM: req.body.name, // 이름 
+                RRNO_BFNB: req.body.birth, // 주민번호앞자리
+                ENCY_RRNO_LSNM: '1234567' // 암호화주민번호뒷자리 필요 X 
+            }
+        }
+    };
 
-    var postModel = new users();
-    postModel.name = name;
-    postModel.userId = userId;
-    postModel.userPassword = userPassword;
-    postModel.account = account;
-
-    postModel
-        .save()
-        .then(newPost => {
-            console.log("Create 완료");
-            res.status(200).json({
-                message: "Create success",
-                data: {
-                    post: newPost
-                }
-            });
-        })
-        .catch(err => {
-            res.status(500).json({
-                message: err
-            });
+    // request API frist
+    axios.request(options)
+        .then((response) => {
+            // dataBody: { CRTF_UNQ_NO: 'MG33785615878699202094', VCNT: '' }
+            const { dataBody } = response.data;
+            return res.status(201).json({ dataBody });
+        }).catch(function (error) {
+            return res.status(500).json({ error });
         });
 });
+
+
+// Check for Phone number Auth
+/**
+ * @returns 고객사용계좌번호 -> account라고 생각하자
+ */
+router.post("/phone/auth", function (req, res, next) {
+    const options = {
+        method: 'POST',
+        url: `${baseUrl}/oai/wb/v1/login/executeCellCerti`,
+        headers: headers,
+        data: {
+            dataHeader: {
+                UTZPE_CNCT_IPAD: '',
+                UTZPE_CNCT_MCHR_UNQ_ID: '',
+                UTZPE_CNCT_TEL_NO_TXT: '',
+                UTZPE_CNCT_MCHR_IDF_SRNO: '',
+                UTZ_MCHR_OS_DSCD: '',
+                UTZ_MCHR_OS_VER_NM: '',
+                UTZ_MCHR_MDL_NM: '',
+                UTZ_MCHR_APP_VER_NM: ''
+            },
+            dataBody: {
+                RRNO_BFNB: req.body.birth, // 주민번호앞자리
+                ENCY_RRNO_LSNM: "1234567", // 암호화주민번호뒷자리, 필요 X
+                ENCY_SMS_CRTF_NO: req.body.auth_number, // SMS인증번호, random O
+                CRTF_UNQ_NO: req.body.auth_token // 인증고유번호! 
+            }
+        }
+    };
+
+    // request and res
+    axios.request(options).then(function (response) {
+        const { dataBody } = response.data;
+        return res.status(201).json({ dataBody });
+        // dataBody['REPT_FA'][0]['CUS_USG_ACNO'] 고객사용계좌번호 -> account라고 생각하자
+    }).catch(function (error) {
+        console.error(error);
+    });
+});
+
+
+// User Create
+router.post("/", function (req, res, next) {
+    const { name, userId, userPassword, phoneNumber, account } = req.body;
+    const newUser = new User(req.body);
+
+    newUser
+        .save()
+        .then(result => {
+            return res.status(200).json({ result });
+        })
+        .catch(err => {
+            return res.status(500).json({ err });
+        });
+});
+
+
+// Get Target User's account info
+router.get("/:user_id", function (req, res, next) {
+    User
+        .findOne({ "userId": req.params.user_id })
+        .then(result => {
+            return res.status(200).json({ result: result['account'] });
+        })
+        .catch(err => {
+            return res.status(500).json({ err });
+        });
+});
+
+
+// ---------------------------------------------------------------------------------------- //
+
+
+
 
 //read all OK
 router.get("/read", function (req, res, next) {

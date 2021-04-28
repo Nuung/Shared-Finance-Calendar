@@ -4,7 +4,12 @@ const user = new mongoose.Schema({
     name: String,
     userId: { type: String, unique: true },
     userPassword: String,
+    phoneNumber: String,
     account: { type: String, unique: true },
+    created_at: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 user.set('collection', 'user'); // collection 이름 정하기

@@ -10,6 +10,7 @@ const escapeJSON = require('escape-json-node');
 // require Routers
 const indexRouter = require('./src/routes/index');
 const userRouter = require('./src/routes/user');
+const transactionRouter = require('./src/routes/transaction');
 
 //−−−−−−−−−−−−−−−−− APP config Setting −−−−−−−−−−−−−−−−−//
 require('dotenv').config(); // add .env file 
@@ -38,7 +39,8 @@ app.use(cors({  // CORS 설정
 
 //−−−−−−−−−−−−−−−−− API Routing Setting −−−−−−−−−−−−−−−−−//
 app.use('/', indexRouter);
-app.use('/user', userRouter);
+app.use('/api/user', userRouter);
+app.use('/api/transaction', transactionRouter);
 
 //−−−−−−−−−−−−−−−−− Other Config Setting −−−−−−−−−−−−−−−−−//
 // catch 404 and forward to error handler
