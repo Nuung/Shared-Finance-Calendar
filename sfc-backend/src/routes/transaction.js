@@ -28,6 +28,36 @@ const User = require("../models/user");
 const Transaction = require("../models/transaction");
 const Excute = require("../models/transaction_excute");
 
+
+// 임의의 내용이 담긴 트렌잭션 결과값 얻어 오기
+/*
+router.post("/", function (req, res, next) {
+
+    const memoRandom
+    const result = [];
+
+    // ~ ~ ~ 
+    const temp = {
+        "TRN_DT": "2021-04-26",
+        "TRN_TM": "121322",
+        "TRN_SRNO": "0",
+        "CUCD": "KRW",
+        "PBOK_PRNG_OTLN_CD": "0318",
+        "DPS_RAP_KDCD": "200",
+        "MD_KDCD": "MIBMPSB2",
+        "RCV_AM": "0.000",
+        "PAY_AM": "032000.000",
+        "DPS_BAL": "114000000.000",
+        "TRN_TXT": "홍길동",
+        "PID_SQ": "0",
+        "TRN_STCD": "376700000.000",
+        "INQ_ACNO": req.body.account,
+    },
+
+});
+*/
+
+
 // 트렌잭션 리스트 얻어오기! 
 /**
  * @returns insert 결과 list
