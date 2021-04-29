@@ -1,3 +1,4 @@
+<!-- 휴대폰 인증 받기 버튼, 인증 번호 받아서 입력해서 회원가입 완료 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
 <body>
     <div>
         <div>
-            <input type="text" id="name" placeholder="userName" />
+            <input type="text" id="username" placeholder="userName" />
         </div>
         <div>
             <input type="text" id="userid" placeholder="userId" />
@@ -21,15 +22,62 @@
             <input type="text" id="phone" placeholder="userPhoneNumber" />
         </div>
         <div>
-            <input type="text" id="account" placeholder="Account" />
-        </div>
-        <div>
             <input type="text" id="birth" placeholder="birthDate" />
         </div>
-        <button id="signupBtn">회원 가입</button>
+        <div>
+        <button id="Btn1">휴대폰 인증하기</button>
+        </div>
+        <div>
+            <input type="text" id="tokenValue" placeholder="tokenValue" />
+        </div>
+        <div>
+        <button id="Btn2">인증 번호 확인하기</button>
+        </div>        
+        <div>
+            <input type="text" id="account" placeholder="Account" />
+        </div>
+        <button id="signupBtn">회원 가입하기</button>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+        $("#Btn1").click(function () {
+            const userName = $("#username").val();
+            const phoneNumber = $("#phone").val();
+            const birthDate = $("#birth").val();
+            $.ajax({
+                url: "http://localhost:3000/api/user/phone",
+                type: "POST",
+                async:false,
+                data: {
+                    phone_number: phoneNumber,
+                    name: userName,
+	                birth:birthDate
+                },
+                success: function (data) {
+                    alert("signup success!!!!");
+                    $('#tokenValue').val(data.dataBody.CRTF_UNQ_NO);
+                },
+            });
+        });
+        $("#Btn2").click(function () {
+            const authToken = $("#tokenValue").val();
+            const authNumber ="123123";
+            const birthDate = $("#birth").val();
+            $.ajax({
+                url: "http://localhost:3000/api/user/phone/auth",
+                type: "POST",
+                data: {
+                    auth_number: authNumber,
+                    auth_token: authToken,
+	                birth:birthDate
+                },
+                success: function (data) {
+                    alert("signup success!!!!");
+                    console.log(data);
+                    $('#account').val(data.dataBody.REPT_FA[0].CUS_USG_ACNO);
+                },
+            });
+        });
         $("#signupBtn").click(function () {
             const userName = $("#username").val();
             const userId = $("#userid").val();
@@ -53,6 +101,7 @@
                 },
             });
         });
+        
     </script>
 </body>
 </html>
