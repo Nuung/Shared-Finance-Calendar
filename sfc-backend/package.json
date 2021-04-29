@@ -30,6 +30,7 @@
     "mysql2": "^2.1.0",
     "passport": "0.4.1",
     "passport-kakao": "1.0.0",
+    "query-string": "^7.0.0",
     "sequelize": "6.3.5",
     "session": "^0.1.0"
   },
