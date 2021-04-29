@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div>
+            <input type="text" id="userid" placeholder="사용자 아이디" />
+        </div>
+        <div>
+            <input type="text" id="account" placeholder="계좌" />
+        </div>
+        <div>
+            <input type="text" id="sharedUserId[]" placeholder="모임인들?" />
+        </div>
+        <div>
+            <input type="text" id="startTime" placeholder="시작 시간" value="2021-04-28T15:36:05.761+00:00"/>
+        </div>
+        <div>
+            <input type="text" id="endTime" placeholder="끝 시간" value="2021-04-28T15:36:05.761+00:00"/>
+        </div>
+        <div>
+            <input type="text" id="location" placeholder="장소" />
+        </div>
+        <div>
+            <input type="text" id="memo" placeholder="메모" />
+        </div>
+        <button id="signupBtn">만들기</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $("#signupBtn").click(function () {
+            const userId = $("#userid").val();
+            const userAccount = $("#account").val();
+            const sharedUserId = $("#sharedUserId").val();
+            const startTime = $("#startTime").val();
+            const endTime = $("#endTime").val();
+            const location = $("#location").val();
+            const memo = $("#memo").val();
+            $.ajax({
+                url: "http://localhost:3000/api/schedule",
+                type: "POST",
+                data: {
+                    userId: userId,
+                    account: userAccount,
+                    sharedUserId: sharedUserId,
+                    startTime: startTime,
+                    endTime: endTime,
+                    location: location,
+                    memo: memo
+                },
+                success: function (data) {
+                    alert("signup success!!!!");
+                },
+            });
+        });
+    </script>
+</body>
+</html>
