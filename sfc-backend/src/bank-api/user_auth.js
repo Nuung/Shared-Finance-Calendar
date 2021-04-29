@@ -125,5 +125,5 @@ const getTargetAcount = (TOKEN) => {
 
 
 // RUN MAIN 
-// getTargetAcount();
-// PhoneAuthCheck();
+getTargetAcount();
+ //PhoneAuthCheck();
