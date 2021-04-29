@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div>
+            <input type="text" id="name" placeholder="userName" />
+        </div>
+        <div>
+            <input type="text" id="userid" placeholder="userId" />
+        </div>
+        <div>
+            <input type="text" id="userpass" placeholder="userPassword" />
+        </div>
+        <div>
+            <input type="text" id="phone" placeholder="userPhoneNumber" />
+        </div>
+        <div>
+            <input type="text" id="account" placeholder="Account" />
+        </div>
+        <div>
+            <input type="text" id="birth" placeholder="birthDate" />
+        </div>
+        <button id="signupBtn">회원 가입</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $("#signupBtn").click(function () {
+            const userName = $("#username").val();
+            const userId = $("#userid").val();
+            const userPassword = $("#userpass").val();
+            const phoneNumber = $("#phone").val();
+            const userAccount = $("#account").val();
+            const birthDate = $("#birth").val();
+            $.ajax({
+                url: "http://localhost:3000/api/user",
+                type: "POST",
+                data: {
+                    name: userName,
+	                userId: userId,
+	                userPassword: userPassword,
+	                phoneNumber: phoneNumber,
+	                account: userAccount,
+	                birth:birthDate
+                },
+                success: function (data) {
+                    alert("signup success!!!!");
+                },
+            });
+        });
+    </script>
+</body>
+</html>
