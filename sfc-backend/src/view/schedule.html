@@ -15,7 +15,7 @@
             <input type="text" id="account" placeholder="계좌" />
         </div>
         <div>
-            <input type="text" id="sharedUserId[]" placeholder="모임인들?" />
+            <input type="text" name="sharedUserId[]" id= "sharedUserId" placeholder="모임인들?" />
         </div>
         <div>
             <input type="text" id="startTime" placeholder="시작 시간" value="2021-04-28T15:36:05.761+00:00"/>
@@ -24,7 +24,7 @@
             <input type="text" id="endTime" placeholder="끝 시간" value="2021-04-28T15:36:05.761+00:00"/>
         </div>
         <div>
-            <input type="text" id="location" placeholder="장소" />
+            <input type="text" name="location[]" id="location" placeholder="장소" />
         </div>
         <div>
             <input type="text" id="memo" placeholder="메모" />
@@ -36,10 +36,15 @@
         $("#signupBtn").click(function () {
             const userId = $("#userid").val();
             const userAccount = $("#account").val();
-            const sharedUserId = $("#sharedUserId").val();
+
+            const sharedUserId = [];
+            $("#sharedUserId").each(function(index,item){
+                sharedUserId.push($(item).val());
+            });
+            console.log(sharedUserId);
             const startTime = $("#startTime").val();
             const endTime = $("#endTime").val();
-            const location = $("#location").val();
+            const location = $("#location").val(); //location도 배열처리
             const memo = $("#memo").val();
             $.ajax({
                 url: "http://localhost:3000/api/schedule",
