@@ -1,7 +1,12 @@
 import React from "react";
+import CalendarForm from "../components/calendar/CalendarForm";
 
 const CalendarPage = () => {
-  return <div>캘린더 화면 뷰(메인)</div>;
+  return (
+    <div>
+      <CalendarForm />
+    </div>
+  );
 };
 
 export default CalendarPage;
