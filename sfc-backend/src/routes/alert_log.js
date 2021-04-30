@@ -103,13 +103,13 @@ router.put("/", async function (req, res, next) {
 });
 
 
-router.get("/rank", async function (req, res, next) {
+router.get("/rank/:userId", async function (req, res, next) {
 
     // return data
     const result = { resultOwn: {}, resultBelong: {} }
 
     // 내가 이체 받은 내역
-    const resultOwn = await Alert.find({ "fromUserId": req.body.userId }).catch((error) => {
+    const resultOwn = await Alert.find({ "fromUserId": req.params.userId }).catch((error) => {
         console.error(error);
         return res.status(500).json({ error });
     });
@@ -122,7 +122,7 @@ router.get("/rank", async function (req, res, next) {
     }
 
     // 내가 이제 한 내역 
-    const resultBelong = await Alert.find({ "userId": req.body.userId }).catch((error) => {
+    const resultBelong = await Alert.find({ "userId": req.params.userId }).catch((error) => {
         console.error(error);
         return res.status(500).json({ error });
     });
@@ -133,6 +133,23 @@ router.get("/rank", async function (req, res, next) {
         else
             result['resultBelong'][`${resultBelong[i]['userId']}`] = resultBelong[i]['amount'];
     }
+
+    return res.status(200).json({ result });
+
+});
+
+// 3. 캘린더에 등록한 일정 중에 모임이 끝나고 정산한 것만 => alert_log status 0 => userId 해당, amount get! / 월 별로
+router.get("/calculation/:userId", async function (req, res, next) {
+
+    Alert
+        .find({ "status": 1, "userId": req.params.userId })
+        .then((result) => {
+            return res.status(200).json({ result });
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.status(500).json({ error });
+        });
 
     return res.status(200).json({ result });
 

@@ -1,7 +1,11 @@
 import React from "react";
+import UserProfile from "../components/UserProfile/UserProfile";
+import UserAccountInfo from "../components/UserProfile/UserAccountInfo";
 
 const ProfilePage = () => {
-  return <div>내계좌 카드관리 계좌 추가등록뷰</div>;
+  return (
+    <UserProfile />
+  );
 };
 
 export default ProfilePage;
