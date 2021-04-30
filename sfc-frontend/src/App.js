@@ -2,6 +2,7 @@ import React from "react";
 import { Route } from "react-router-dom";
 import logo from "./logo.svg";
 import "./normalize.css";
+import "semantic-ui-css/semantic.min.css";
 
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
