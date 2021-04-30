@@ -85,44 +85,6 @@ const PhoneAuthCheck = (CRTF_UNQ_NO) => {
     });
 }
 
-
-/** 계좌기본조회
- * @desc    - 우리은행의 계좌 별 정보를 조회한다. 전계좌조회의 계좌상태코드가 휴면코드나, 해지코드로 조회된 계좌는 계좌기본조회가 불가하다.
- * @method  - POST
- */
-const getTargetAcount = (TOKEN) => {
-    const options = {
-        method: 'POST',
-        url: `${baseUrl}/oai/wb/v1/finance/getAccBasicInfo`,
-        headers: headers, // header에 원래 인증 TOKEN필요함 
-        data: {
-            dataHeader: {
-                UTZPE_CNCT_IPAD: '',
-                UTZPE_CNCT_MCHR_UNQ_ID: '',
-                UTZPE_CNCT_TEL_NO_TXT: '',
-                UTZPE_CNCT_MCHR_IDF_SRNO: '',
-                UTZ_MCHR_OS_DSCD: '',
-                UTZ_MCHR_OS_VER_NM: '',
-                UTZ_MCHR_MDL_NM: '',
-                UTZ_MCHR_APP_VER_NM: ''
-            },
-            dataBody: {
-                INQ_ACNO: '1002123456789',
-                INQ_BAS_DT: '20210220',
-                ACCT_KND: 'P',
-                INQ_CUCD: 'KRW'
-            }
-        }
-    };
-
-    // request 
-    axios.request(options).then(function (response) {
-        console.log(response.data);
-    }).catch(function (error) {
-        console.error(error);
-    });
-}
-
 /** 당행 계좌 이체 
  * @desc    - 
  * @method  - POST
@@ -163,8 +125,72 @@ const UserTransfer = (myAccount, amount, yourAccount, text) => {
     });
 };
 
-UserTransfer('1002134567899', '500000', '1002987654321', '스터디룸 비용');
+/** 계좌기본조회 
+ * @desc    - 우리은행의 계좌 별 정보를 조회한다. 전계좌조회의 계좌상태코드가 휴면코드나, 해지코드로 조회된 계좌는 계좌기본조회가 불가하다.
+ * @method  - POST
+ * @return  - CT_BAL 현재잔액 / PAY_AVL_AM 지급가능금액 / 
+ */
+const getAccBasicInfo = (myAccount) => {
+    const options = {
+        method: 'POST',
+        url: `${baseUrl}/oai/wb/v1/finance/getAccBasicInfo`,
+        headers: headers, // header에 원래 인증 TOKEN필요함 
+        data: {
+            dataHeader: {
+                UTZPE_CNCT_IPAD: '',
+                UTZPE_CNCT_MCHR_UNQ_ID: '',
+                UTZPE_CNCT_TEL_NO_TXT: '',
+                UTZPE_CNCT_MCHR_IDF_SRNO: '',
+                UTZ_MCHR_OS_DSCD: '',
+                UTZ_MCHR_OS_VER_NM: '',
+                UTZ_MCHR_MDL_NM: '',
+                UTZ_MCHR_APP_VER_NM: ''
+            },
+            dataBody: {
+                INQ_ACNO: `${myAccount}`,
+                INQ_BAS_DT: '20210220',
+                ACCT_KND: 'P',
+                INQ_CUCD: 'KRW'
+            }
+        }
+    };
+
+    // request 
+    axios.request(options).then(function (response) {
+        console.log(response.data);
+    }).catch(function (error) {
+        console.error(error);
+    });
+
+    /*
+    {
+dataHeader: {},
+dataBody: {
+    ACNO: '10098256*****',
+    DPS_STCD: '01',
+    CUCD: 'KRW',
+    CT_BAL: '3235030.000',
+    PAY_AVL_AM: '8765030.000',
+    NEW_DT: '2020-11-01',
+    XPR_DT: '2021-11-01',
+    TXTR_PDCD: '',
+    MM_PID_AM: '6870000.000',
+    FDN_DSCD: '00',
+    TDY_EVL_AM: '0',
+    IVST_PRN: '0',
+    SMPL_PRFT_RT: '',
+    LST_LN_PCS_AM: ''
+}
+}
+*/
+};
+
+
+
+
 
 // RUN MAIN
 // getTargetAcount();
 // PhoneAuthCheck();
+// UserTransfer('1002134567899', '500000', '1002987654321', '스터디룸 비용');
+getAccBasicInfo("1002123456789");

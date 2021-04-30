@@ -103,5 +103,40 @@ router.put("/", async function (req, res, next) {
 });
 
 
+router.get("/rank", async function (req, res, next) {
+
+    // return data
+    const result = { resultOwn: {}, resultBelong: {} }
+
+    // 내가 이체 받은 내역
+    const resultOwn = await Alert.find({ "fromUserId": req.body.userId }).catch((error) => {
+        console.error(error);
+        return res.status(500).json({ error });
+    });
+
+    for (let i = 0; i < resultOwn.length; i++) {
+        if (result['resultOwn'][`${resultOwn[i]['userId']}`])
+            result['resultOwn'][`${resultOwn[i]['userId']}`] = result['resultOwn'][`${resultOwn[i]['userId']}`] + resultOwn[i]['amount'];
+        else
+            result['resultOwn'][`${resultOwn[i]['userId']}`] = resultOwn[i]['amount'];
+    }
+
+    // 내가 이제 한 내역 
+    const resultBelong = await Alert.find({ "userId": req.body.userId }).catch((error) => {
+        console.error(error);
+        return res.status(500).json({ error });
+    });
+
+    for (let i = 0; i < resultBelong.length; i++) {
+        if (result['resultBelong'][`${resultBelong[i]['userId']}`])
+            result['resultBelong'][`${resultBelong[i]['userId']}`] = result['resultBelong'][`${resultBelong[i]['userId']}`] + resultBelong[i]['amount'];
+        else
+            result['resultBelong'][`${resultBelong[i]['userId']}`] = resultBelong[i]['amount'];
+    }
+
+    return res.status(200).json({ result });
+
+});
+
 
 module.exports = router;
