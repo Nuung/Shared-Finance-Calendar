@@ -8,6 +8,12 @@
 1. npm install
 2. npm run start : 자동으로 localhost:3001가 열립니다
 
+## 사용 라이브러리
+
+- react-router-dom
+- axios
+- sementic UI react
+
 ## 라우팅
 
 - Calendar(메인) : /
