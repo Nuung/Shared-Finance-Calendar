@@ -161,6 +161,28 @@ const getAccBasicInfo = (myAccount) => {
     }).catch(function (error) {
         console.error(error);
     });
+
+    /*
+    {
+dataHeader: {},
+dataBody: {
+    ACNO: '10098256*****',
+    DPS_STCD: '01',
+    CUCD: 'KRW',
+    CT_BAL: '3235030.000',
+    PAY_AVL_AM: '8765030.000',
+    NEW_DT: '2020-11-01',
+    XPR_DT: '2021-11-01',
+    TXTR_PDCD: '',
+    MM_PID_AM: '6870000.000',
+    FDN_DSCD: '00',
+    TDY_EVL_AM: '0',
+    IVST_PRN: '0',
+    SMPL_PRFT_RT: '',
+    LST_LN_PCS_AM: ''
+}
+}
+*/
 };
 
 
