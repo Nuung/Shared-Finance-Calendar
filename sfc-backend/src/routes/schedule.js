@@ -29,6 +29,7 @@ const User = require("../models/user");
 const Transaction = require("../models/transaction");
 const Excute = require("../models/transaction_excute"); // alert_log와 상관 있습니다!
 const Schedule = require("../models/schedule");
+const Alert = require("../models/alert_log");
 
 /** Add schedule!
  * @returns insert 결과
@@ -81,11 +82,35 @@ router.get("/:userId", function (req, res, next) {
 /** Insert new alert_log
  * @returns find by ObjectId and Updaet! 결과 return
  */
-router.put("/alert", function (req, res, next) {
-    
-    // -> 
+router.post("/alert", function (req, res, next) {
 
+    // "스플릿할 대상 체크 박스 [] " 를 통해 userId array list
+    // 가격도 입력해서 넘겨준다!
+    const { user_list, fromUserId, targetSchedule, targetAccount, amount, memo } = req.body;
 
+    // user_list에 스플릿할 넘들 array (곧 userId가 된다)
+    const splitAmount = amount / user_list.length;
+    const newAlertList = []
+    for (let i = 0; i < user_list.length; i++) {
+        const newAlertLog = {}
+        newAlertLog.userId = user_list[i];
+        newAlertLog.fromUserId = fromUserId;
+        newAlertLog.targetSchedule = targetSchedule;
+        newAlertLog.targetAccount = targetAccount;
+        newAlertLog.amount = splitAmount;
+        newAlertLog.memo = memo;
+        newAlertList.push(newAlertLog);
+    }
+    Alert
+        .insertMany(newAlertList)
+        .then(result => {
+
+            return res.status(201).json({ result });
+        })
+        .catch(err => {
+            console.log(err);
+            return res.status(500).json({ err });
+        });
 });
 
 

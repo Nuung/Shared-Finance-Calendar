@@ -157,19 +157,6 @@ dist/
 tmp/
 temp/
 
-### react ###
-.DS_*
-**/*.backup.*
-**/*.back.*
-
-node_modules
-
-*.sublime*
-
-psd
-thumb
-sketch
-
 ### vscode ###
 .vscode/*
 !.vscode/settings.json
