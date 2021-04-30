@@ -12,6 +12,7 @@ const indexRouter = require('./src/routes/index');
 const userRouter = require('./src/routes/user');
 const transactionRouter = require('./src/routes/transaction');
 const scheduleRouter = require('./src/routes/schedule');
+const alertRouter = require('./src/routes/alert_log');
 
 //−−−−−−−−−−−−−−−−− APP config Setting −−−−−−−−−−−−−−−−−//
 require('dotenv').config(); // add .env file 
@@ -43,6 +44,7 @@ app.use('/', indexRouter);
 app.use('/api/user', userRouter);
 app.use('/api/transaction', transactionRouter);
 app.use('/api/schedule', scheduleRouter);
+app.use('/api/alert', alertRouter);
 
 //−−−−−−−−−−−−−−−−− Other Config Setting −−−−−−−−−−−−−−−−−//
 // catch 404 and forward to error handler

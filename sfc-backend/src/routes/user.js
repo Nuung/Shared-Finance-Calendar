@@ -126,8 +126,22 @@ router.post("/", function (req, res, next) {
 });
 
 
-// Get Target User's account info
+
+// Get Target User's info
 router.get("/:user_id", function (req, res, next) {
+    User
+        .findOne({ "userId": req.params.user_id })
+        .then(result => {
+            return res.status(200).json({ result });
+        })
+        .catch(err => {
+            return res.status(500).json({ err });
+        });
+});
+
+
+// Get Target User's account info
+router.get("/account/:user_id", function (req, res, next) {
     User
         .findOne({ "userId": req.params.user_id })
         .then(result => {
