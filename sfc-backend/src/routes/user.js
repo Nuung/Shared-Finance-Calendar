@@ -32,6 +32,9 @@ const User = require("../models/user"); //load schema
  * @returns 인증고유 번호! auth_token!
  */
 router.post("/phone", function (req, res, next) {
+
+    console.log(req.body);
+
     const options = {
         method: 'POST',
         url: `${baseUrl}/oai/wb/v1/login/getCellCerti`,
@@ -49,7 +52,7 @@ router.post("/phone", function (req, res, next) {
             },
             dataBody: {
                 COMC_DIS: '1', // 통신사 1. SKT 2. KT 3. LGU+ 5. SKT(알뜰폰) 6. KT(알뜰폰) 7. LGU+(알뜰폰)
-                HP_NO: req.body.phone_number,
+                HP_NO: req.body.phoneNumber,
                 HP_CRTF_AGR_YN: 'Y', // 약관 동의 
                 FNM: req.body.name, // 이름 
                 RRNO_BFNB: req.body.birth, // 주민번호앞자리
@@ -114,11 +117,11 @@ router.post("/phone/auth", function (req, res, next) {
 router.post("/", function (req, res, next) {
     const { name, userId, userPassword, phoneNumber, account } = req.body;
     const newUser = new User(req.body);
-
+    console.log(newUser);
     newUser
         .save()
         .then(result => {
-            return res.status(200).json({ result });
+            return res.status(201).json({ result });
         })
         .catch(err => {
             return res.status(500).json({ err });
