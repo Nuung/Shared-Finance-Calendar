@@ -52,6 +52,24 @@ router.post("/", function (req, res, next) {
         });
 });
 
+// 스케쥴 status 0 -> 1 update! 
+router.put("/", async function (req, res, next) {
+    const result = await Schedule.findById({ "_id": ObjectID(req.body.targetId) });
+
+    // 이미 status가 1인 스케쥴이면 error
+    if (result.status == 1) return res.status(404).json({ result: "이미 이체 처리된 알람입니다." });
+    Schedule
+        .updateOne({ "_id": ObjectID(req.body.targetId) }, { "status": req.body.status, "updated_at": new Date() })
+        .then(result => {
+            return res.status(201).json({ result });
+        })
+        .catch(err => {
+            console.log(err);
+            return res.status(500).json({ err });
+        });
+});
+
+
 /** Get schedule by month and year!
  * @returns find 결과 array
  */
@@ -69,8 +87,7 @@ router.get("/:userId", function (req, res, next) {
             { "startTime": { $gte: rangeStart, $lt: rangeEnd }, "sharedUserId": { "$in": [req.params.userId] } }]
         })
         .then(result => {
-
-            return res.status(201).json({ result });
+            return res.status(200).json({ result });
         })
         .catch(err => {
             console.log(err);

@@ -93,13 +93,37 @@ const Authform = ({ type }) => {
         <Form.Field>
           <label>Name</label>
           <input id="name" placeholder="이름을 입력해주세요" />
+        </Form.Field>
+      }
+      {type === "register" &&
+        <Form.Field>
           <label>Phone Number</label>
           <input id="phoneNumber" placeholder="휴대폰 번호를 입력해 주세요" />
+        </Form.Field>
+      }
+      {type === "register" &&
+        <Form.Field>
           <label>Birth Number</label>
           <input id="birth" placeholder="생년월일 ex)950704" />
+        </Form.Field>
+      }
+      {type === "register" &&
+        <Form.Field className="auth__form__btn">
           <Button type="button" onClick={() => fetchAuthToken()}>인증 번호 받기</Button>
+        </Form.Field>
+      }
+      {type === "register" &&
+        <Form.Field>
           <input id="auth_token" placeholder="인증 번호 받기를 눌러주세요!" />
+        </Form.Field>
+      }
+      {type === "register" &&
+        <Form.Field className="auth__form__btn">
           <Button type="button" onClick={() => fetchAuthTokenChk()}>인증 번호 확인</Button>
+        </Form.Field>
+      }
+      {type === "register" &&
+        <Form.Field>
           <label>Account Number</label>
           <input id="account" placeholder="계좌 번호를 입력해 주세요" />
         </Form.Field>
@@ -119,9 +143,11 @@ const Authform = ({ type }) => {
         </Form.Field>
       }
 
-      <Button type="submit" onClick={() => fetchSign(type)}>
-        {txt}
-      </Button>
+      <Form.Field className="auth__form__btn">
+        <Button type="submit" onClick={() => fetchSign(type)}>
+          {txt}
+        </Button>
+      </Form.Field>
 
       <footer className="auth__another">
         {type === "login" ? (

@@ -1,3 +1,7 @@
 .auth__another {
   text-align: right;
 }
+
+.auth__form__btn {
+  text-align: center !important;
+}
