@@ -76,9 +76,8 @@ router.put("/", async function (req, res, next) {
 router.get("/:userId", function (req, res, next) {
 
     // date filter
-    let rangeStart = new Date(`${Number(req.query.year)}-${Number(req.query.month)}`);
-    rangeStart.setDate(rangeStart.getDate() + 1);
-    const rangeEnd = new Date(`${Number(req.query.year)}-${Number(req.query.month) + 1}`);
+    const rangeStart = new Date(`${Number(req.query.year)}-01-01`);
+    const rangeEnd = new Date(`${Number(req.query.year)}-12-31`);
 
     // createUserId (모임주), sharedUserId (array)에 현재 달력을 보고 있는 유저 ID이 있는것들 모두 불러와야함
     Schedule
@@ -94,7 +93,6 @@ router.get("/:userId", function (req, res, next) {
             return res.status(500).json({ err });
         });
 });
-
 
 /** Insert new alert_log
  * @returns find by ObjectId and Updaet! 결과 return
