@@ -1,4 +1,17 @@
-.auth__template {
+.auth__template__register {
+  display: block;
+  position: absolute;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: grey;
+}
+
+.auth__template__login {
   display: flex;
   position: absolute;
   flex-direction: column;

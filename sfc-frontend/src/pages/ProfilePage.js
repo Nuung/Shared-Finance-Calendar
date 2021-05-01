@@ -1,10 +1,9 @@
 import React from "react";
-import UserProfile from "../components/UserProfile/UserProfile";
-import UserAccountInfo from "../components/UserProfile/UserAccountInfo";
+import UserProfileTemplate from "../components/info/UserProfileTemplate/UserProfileTemplate";
 
 const ProfilePage = () => {
   return (
-    <UserProfile />
+    <UserProfileTemplate />
   );
 };
 

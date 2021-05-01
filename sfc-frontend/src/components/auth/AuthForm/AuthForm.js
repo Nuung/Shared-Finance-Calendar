@@ -84,6 +84,7 @@ const fetchAuthTokenChk = async () => {
 }
 
 const Authform = ({ type }) => {
+
   const txt = textmap[type];
   return (
     <Form>
