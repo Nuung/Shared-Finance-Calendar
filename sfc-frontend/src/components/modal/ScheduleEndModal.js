@@ -1,49 +1,29 @@
 import React from 'react';
-import { Button, Header, Icon, Modal } from 'semantic-ui-react';
-
-const exampleReducer = (state, action) => {
-    switch (action.type) {
-        case 'close':
-            return { open: false }
-        case 'open':
-            return { open: true, size: action.size }
-        default:
-            throw new Error('Unsupported action...')
-    }
-}
+import { Checkbox } from 'semantic-ui-react';
+import './ScheduleEndModal.css';
 
 const ScheduleEndModal = () => {
-    const [state, dispatch] = React.useReducer(exampleReducer, {
-        open: false
-    });
-    const { open } = state;
-
+    const name = "hyemin";
+    const amount = "10000";
     return (
-        <div>
-            <Button onClick={() => dispatch({ type: 'open' })}>
-                Mini
-          </Button>
-
-            <Modal
-                size='mini'
-                open={open}
-                onClose={() => dispatch({ type: 'close' })}
-            >
-                <Modal.Header>Delete Your Account</Modal.Header>
-                <Modal.Content>
-                    <p>Are you sure you want to delete your account</p>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button negative onClick={() => dispatch({ type: 'close' })}>
-                        No
-              </Button>
-                    <Button positive onClick={() => dispatch({ type: 'close' })}>
-                        Yes
-              </Button>
-                </Modal.Actions>
-            </Modal>
-        </div>
+        <React.Fragment>
+            <div className="Modal-overlay" />
+            <div className="Modal">
+                <p className="title">모임 종료</p>
+                <p>{amount}원이 나왔습니다.</p>
+                <div className="content">
+                    <p>정산할 멤버를 고르세요</p>
+                    <div>
+                        <Checkbox label={name} />
+                        <Checkbox label={name} />
+                        <Checkbox label={name} />
+                    </div>
+                </div>
+                <div className="button-wrap">
+                    <button> 알림보내기 </button>
+                </div>
+            </div>
+        </React.Fragment>
     )
 }
-
-export default ScheduleEndModal
+export default ScheduleEndModal;

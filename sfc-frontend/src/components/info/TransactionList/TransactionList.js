@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { List } from 'semantic-ui-react'
-
+import Loader from "../../loader/Loader";
 
 import "./TransactionList.css";
 
@@ -35,7 +35,7 @@ const TransactionList = ({ }) => {
     return (
         <List divided relaxed className="transaction__list">
 
-            {!datas && <p> LOADING </p>}
+            {!datas && <Loader />}
             {datas && (
                 datas['result'].map((data) => {
                     if (data['PAY_AM']) {

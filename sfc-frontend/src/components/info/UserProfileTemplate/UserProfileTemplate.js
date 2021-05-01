@@ -13,8 +13,8 @@ import * as service from '../../../services/sign';
 const UserProfileTemplate = ({ type }) => {
     return (
         <div>
-            <TransactionRank />
             <TransactionGraph />
+            <TransactionRank />
             <TransactionList />
         </div>
     );
