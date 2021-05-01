@@ -9,8 +9,38 @@ import * as service from '../../../services/info';
 
 const TransactionGraph = ({ }) => {
 
-    const data = [{ name: '1월', 정산요금: 10 }, { name: '2월', 정산요금: 40 }, { name: '2월', 정산요금: 40 }
-        , { name: '3월', 정산요금: 50 }, { name: '4월', 정산요금: 40 }, { name: '5월', 정산요금: 20 }, { name: '6월', 정산요금: 90 }];
+    // state { name: 몇월, 정산요금: 얼마 }
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        const userInfo = JSON.parse(window.localStorage.userInfo);
+        setTimeout(() => {
+            service.getcalculationMonthly(userInfo.result.userId)
+                .then((result) => {
+                    const updateData = [];
+                    const tempDict = {};
+                    const resultDatas = result.data.result;
+                    resultDatas.map((data) => {
+                        const month = new Date(data.created_at).getMonth() + 1;
+                        if (tempDict[month]) tempDict[month] += data.amount;
+                        else tempDict[month] = data.amount;
+                    });
+
+                    // dict to array_dict
+                    for (const key in tempDict) {
+                        updateData.push({
+                            name: key,
+                            정산요금: tempDict[key]
+                        });
+                    }
+
+                    // set state
+                    setData(updateData);
+                })
+                .catch((error) => console.log(error));
+        }, 1000);
+    }, []);
+
     const AxisLabel = ({ axisType, x, y, width, height, stroke, children }) => {
         const isVert = axisType === 'yAxis';
         const cx = isVert ? x : x + (width / 2);
@@ -33,7 +63,7 @@ const TransactionGraph = ({ }) => {
                     bottom: 5,
                 }}
             >
-                <CartesianGrid strokeDasharray="3 3" />
+                {/* <CartesianGrid strokeDasharray="3 3" /> */}
                 <XAxis dataKey="name" label={<AxisLabel axisType="xAxis" x={400} y={230} width={0} height={0}>  월 별</AxisLabel>} />
                 <YAxis label={<AxisLabel axisType="xAxis" x={25} y={25} width={0} height={0}>금액</AxisLabel>} />
 
@@ -44,50 +74,6 @@ const TransactionGraph = ({ }) => {
 
         </div>
     );
-
-    /*
-    const [datas, setData] = useState(null);
-
-    useEffect(() => {
-        setTimeout(() => {
-            service.getTransaction("10029218*****")
-                .then((result) => setData(result.data))
-                .catch((error) => console.log(error));
-        }, 1000);
-    }, []);
-
-    return (
-        <List divided relaxed className="transaction__list">
-
-            {!datas && <p> LOADING </p>}
-            {datas && (
-                datas['result'].map((data) => {
-                    if (data['PAY_AM']) {
-                        return (
-                            <List.Item className="transaction__list__item">
-                                <List.Content>
-                                    <List.Header as='a'>{data['TRN_DT']} {data['TRN_TXT']}</List.Header>
-                                    <List.Description className="transaction__list__desc" as='a'>출금: {data['PAY_AM']}, 잔액: {data['DPS_BAL']}</List.Description>
-                                </List.Content>
-                            </List.Item>
-                        )
-                    }
-                    else {
-                        return (
-                            <List.Item>
-                                <List.Content>
-                                    <List.Header as='a'>{data['TRN_DT']} {data['TRN_TXT']}</List.Header>
-                                    <List.Description as='a'>입금: {data['RCV_AM']}, 잔액: {data['DPS_BAL']}</List.Description>
-                                </List.Content>
-                            </List.Item>
-                        )
-                    }
-                })
-            )}
-
-        </List>
-    );
-    */
 };
 
 export default TransactionGraph;

@@ -13,7 +13,7 @@ const CalendarForm = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/schedule/${userId}?year=${date[0]}&month=${date[1]}`)
+      .get(`http://3.35.6.3:3000/api/schedule/${userId}?year=${date[0]}&month=${date[1]}`)
       .then((res) => {
         const events = res.data.result.map((event) => {
           const eventObj = {

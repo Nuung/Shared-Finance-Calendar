@@ -40,8 +40,8 @@ const TransactionList = ({ }) => {
                 datas['result'].map((data) => {
                     if (data['PAY_AM']) {
                         return (
-                            <List.Item className="transaction__list__item">
-                                <List.Content>
+                            <List.Item id={data['_id']} className="transaction__list__item">
+                                <List.Content id={data['_id']}>
                                     <List.Header as='a'>{data['TRN_DT']} {data['TRN_TXT']}</List.Header>
                                     <List.Description className="transaction__list__desc" as='a'>출금: {data['PAY_AM']}, 잔액: {data['DPS_BAL']}</List.Description>
                                 </List.Content>
@@ -50,7 +50,7 @@ const TransactionList = ({ }) => {
                     }
                     else {
                         return (
-                            <List.Item>
+                            <List.Item id={data['_id']}>
                                 <List.Content>
                                     <List.Header as='a'>{data['TRN_DT']} {data['TRN_TXT']}</List.Header>
                                     <List.Description as='a'>입금: {data['RCV_AM']}, 잔액: {data['DPS_BAL']}</List.Description>

@@ -167,9 +167,6 @@ router.get("/calculation/:userId", async function (req, res, next) {
             console.error(error);
             return res.status(500).json({ error });
         });
-
-    return res.status(200).json({ result });
-
 });
 
 
