@@ -1,5 +1,5 @@
 .profile__div {
-    display: flex;
+    display: block;
     position: absolute;
     flex-direction: column;
     justify-content: center;
@@ -9,8 +9,4 @@
     bottom: 0;
     left: 0;
     background: grey;
-}
-
-.profile__div > table {
-    width: 60% !important;
 }

@@ -1,0 +1,11 @@
+.transaction__list {
+    text-align: left;
+}
+
+.transaction__list__item {
+    margin: 10px;
+}
+
+.transaction__list__desc {
+    text-align: right;
+}
