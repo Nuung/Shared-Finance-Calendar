@@ -94,6 +94,7 @@ const Header = () => {
           <Button positive onClick={() => {
             dispatch({ type: 'close' });
             fetchExcute(data, JSON.parse(window.localStorage.userInfo).result.account);
+            toast.success("이체가 완료 되었습니다!!");
           }}>
             Yes
           </Button>
