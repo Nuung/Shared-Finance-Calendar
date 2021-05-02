@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer, forwardRef } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Button, Modal, Input, Item, Label } from "semantic-ui-react";
+import { Button, Modal, Input, Item, Label, Icon } from "semantic-ui-react";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import moment from "moment";
 import "moment/locale/ko";
@@ -45,6 +45,30 @@ const CalendarForm = () => {
   const [friend, setFriend] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [scheduleLoading, loadSchedule] = useState(false);
+  const [scheduleIdx, incrementIdx] = useState(0);
+  const dateList = [
+    {
+      start: "Tue May 04 2021 13:45:00 GMT+0900 (Korean Standard Time)",
+      end: "Tue May 04 2021 14:45:00 GMT+0900 (Korean Standard Time)",
+    },
+    {
+      start: "Tue May 06 2021 11:30:00 GMT+0900 (Korean Standard Time)",
+      end: "Tue May 06 2021 12:30:00 GMT+0900 (Korean Standard Time)",
+    },
+    {
+      start: "Tue May 09 2021 18:45:00 GMT+0900 (Korean Standard Time)",
+      end: "Tue May 09 2021 19:50:00 GMT+0900 (Korean Standard Time)",
+    },
+    {
+      start: "Tue May 11 2021 13:45:00 GMT+0900 (Korean Standard Time)",
+      end: "Tue May 11 2021 14:45:00 GMT+0900 (Korean Standard Time)",
+    },
+  ];
+
+  const incrementIndex = () => {
+    incrementIdx((scheduleIdx + 1) % 4);
+  };
 
   const [
     registrationModal,
@@ -63,22 +87,25 @@ const CalendarForm = () => {
   const date = moment().format("YYYY/M/D").split("/");
 
   useEffect(() => {
-    axios
-      .get(`http://3.35.6.3:3000/api/schedule/${userId}?year=${date[0]}`)
-      .then((res) => {
-        const events = res.data.result.map((event) => {
-          const eventObj = {
-            title: event.memo,
-            start: event.startTime,
-            end: event.endTime,
-            allDay: false,
-            // resource: "1234",
-          };
-          return eventObj;
-        });
+    const func = setInterval(() => {
+      axios
+        .get(`http://3.35.6.3:3000/api/schedule/${userId}?year=${date[0]}`)
+        .then((res) => {
+          const events = res.data.result.map((event) => {
+            const eventObj = {
+              title: event.memo,
+              start: event.startTime,
+              end: event.endTime,
+              allDay: false,
+              // resource: "1234",
+            };
+            return eventObj;
+          });
 
-        setEvents(events);
-      });
+          setEvents(events);
+        });
+    }, 1000);
+    return () => clearInterval(func);
   }, [open, check_open]);
 
   return (
@@ -135,7 +162,9 @@ const CalendarForm = () => {
             <DatePicker
               className="calendar__datepicker"
               selected={startDate}
-              onChange={(date) => setStartDate(date)}
+              onChange={(date) => {
+                setStartDate(date);
+              }}
               showTimeInput
               dateFormat="yyyy.MM.dd(eee) p"
               timeFormat="HH:mm"
@@ -145,21 +174,44 @@ const CalendarForm = () => {
             />
           </div>
           <br />
-          <br />
-          <div>
-            <Label size="large">종료일</Label>
-            <DatePicker
-              className="calendar__datepicker"
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              showTimeInput
-              dateFormat="yyyy.MM.dd(eee) p"
-              timeFormat="HH:mm"
-              timeInputLabel="Time:"
-              locale="ko"
-              popperModifiers={{ preventOverflow: { enabled: true } }}
-            />
+          <div className="calendar__datepicker-wrapper">
+            <div>
+              <Label size="large">종료일</Label>
+              <DatePicker
+                className="calendar__datepicker"
+                selected={endDate}
+                onChange={(date) => {
+                  setEndDate(date);
+                }}
+                showTimeInput
+                dateFormat="yyyy.MM.dd(eee) p"
+                timeFormat="HH:mm"
+                timeInputLabel="Time:"
+                locale="ko"
+                popperModifiers={{ preventOverflow: { enabled: true } }}
+              />
+            </div>
+            <Button
+              primary
+              size="tiny"
+              loading={scheduleLoading}
+              onClick={async (e) => {
+                await loadSchedule(true);
+                await incrementIndex();
+                const start = new Date(dateList[scheduleIdx].start);
+                const end = new Date(dateList[scheduleIdx].end);
+                setTimeout(() => {
+                  setStartDate(start);
+                  setEndDate(end);
+                }, 500);
+                setTimeout(() => loadSchedule(false), 1000);
+              }}
+            >
+              <Icon name="world" />
+              일정추천
+            </Button>
           </div>
+          <br />
         </Modal.Content>
         <Modal.Actions>
           <Button

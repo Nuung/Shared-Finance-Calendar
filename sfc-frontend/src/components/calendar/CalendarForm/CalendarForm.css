@@ -3,3 +3,8 @@
   background-color: rgb(204, 245, 255);
   border-radius: 4px;
 }
+
+.calendar__datepicker-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
