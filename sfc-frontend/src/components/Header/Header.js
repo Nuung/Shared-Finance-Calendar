@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import React, { useState, useReducer } from "react";
 import axios from 'axios';
 import { Icon, Menu, Button, Modal } from "semantic-ui-react";
-=======
-import React from "react";
-import { Icon, Menu, Dropdown } from "semantic-ui-react";
->>>>>>> master
 import { Link } from "react-router-dom";
 
 import { ToastContainer, toast } from 'react-toastify';
