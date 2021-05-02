@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import React, { useState, useReducer } from "react";
 import axios from 'axios';
 import { Icon, Menu, Button, Modal } from "semantic-ui-react";
+=======
+import React from "react";
+import { Icon, Menu, Dropdown } from "semantic-ui-react";
+>>>>>>> master
 import { Link } from "react-router-dom";
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -104,11 +109,11 @@ const Header = () => {
       <div className="header__">
         <div className="header__wrapper">
           <div className="header__hamburger">
-            <Icon
-              name="align justify"
-              size="large"
-              onClick={() => console.log("메뉴가 열립니다")}
-            />
+            <Dropdown icon="align justify" size="large">
+              <Dropdown.Menu>
+                <Dropdown.Item text="Logout" />
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
           <div class="header__right">
             <Icon

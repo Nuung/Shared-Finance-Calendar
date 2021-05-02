@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Button, Grid, Label, Modal, Segment, Input } from "semantic-ui-react";
+import { Button, Modal, Input, Item } from "semantic-ui-react";
 import moment from "moment";
+import "moment/locale/ko";
 import axios from "axios";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+
+moment.locale("ko");
 
 const localizer = momentLocalizer(moment);
 
@@ -63,25 +66,25 @@ const CalendarForm = () => {
     });
   }, []);
 
-  console.log(targetInfo);
   return (
     <div className="Calendar__wrapper">
       <Calendar
         localizer={localizer}
         defaultDate={new Date()}
         events={events}
-        selectable
+        selectable={true}
+        longPressThreshold={10}
         popup
         onSelectEvent={async (e) => {
           await setTargetInfo(e);
           dispatch_checkModal({ type: "open" });
         }} // 기존 이벤트 확인
-        onSelectSlot={(e) => {
+        onSelectSlot={async (e) => {
           dispatch_registrationModal({ type: "open" });
         }} // 새로운 이벤트 추가
-        views={["day", "week", "month"]}
+        views={["month"]}
         defaultView="month"
-        style={{ width: "100%", height: "100vh" }}
+        style={{ width: "100%", height: "85vh" }}
       />
 
       {/* 일정 등록을 위한 modal */}
@@ -93,10 +96,22 @@ const CalendarForm = () => {
           setTargetInfo({});
         }}
       >
-        <Modal.Header>새로운 모임 생성</Modal.Header>
+        <Modal.Header>더치페이 스케쥴 등록</Modal.Header>
         <Modal.Content>
-          여기다가 이제 sharedUserId:array, startTime, endTime, location, memo
-          넣어줘야됨
+          {/* userId, account, sharedUserId, startTime, endTime, memo */}
+          <Input label="모임 이름" placehoder="모임 이름을 적어주세요" />
+          <br />
+          <br />
+          <Input
+            label="더치페이할 대상"
+            placehoder="친구 아이디를 적어주세요"
+          />
+          <br />
+          <br />
+          <Input label="시작시간" placehoder="시작시간을 적어주세요" />
+          <br />
+          <br />
+          <Input label="종료시간" placehoder="종료시간를 적어주세요" />
         </Modal.Content>
         <Modal.Actions>
           <Button
@@ -125,16 +140,29 @@ const CalendarForm = () => {
       >
         <Modal.Header>스케쥴 확인</Modal.Header>
         <Modal.Content>
-          <div>{targetInfo.title}</div>
+          {/* <div>{targetInfo.title}</div>
           <div>{targetInfo.start}</div>
-          <div>{targetInfo.end}</div>
+          <div>{targetInfo.end}</div> */}
+          <Item.Group>
+            <Item>
+              <Item.Content>
+                <Item.Header as="a">{targetInfo.title}</Item.Header>
+                <Item.Meta>
+                  {moment(targetInfo.start).format("YYYY MMMM Do a h:mm:ss")}
+                </Item.Meta>
+                <Item.Meta>
+                  {moment(targetInfo.end).format("YYYY MMMM Do a h:mm:ss")}
+                </Item.Meta>
+              </Item.Content>
+            </Item>
+          </Item.Group>
         </Modal.Content>
         <Modal.Actions>
           <Button
             negative
             onClick={() => dispatch_checkModal({ type: "close" })}
           >
-            취소
+            정산하기
           </Button>
           <Button
             positive
