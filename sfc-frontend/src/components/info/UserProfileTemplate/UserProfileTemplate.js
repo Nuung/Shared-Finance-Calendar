@@ -15,7 +15,7 @@ const UserProfileTemplate = ({ type }) => {
         <div>
             <TransactionGraph />
             <TransactionRank />
-            <TransactionList />
+            <TransactionList type="10" />
         </div>
     );
 };
