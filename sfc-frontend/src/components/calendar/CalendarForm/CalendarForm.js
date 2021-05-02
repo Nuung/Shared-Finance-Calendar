@@ -90,8 +90,9 @@ const CalendarForm = () => {
         selectable={true}
         longPressThreshold={10}
         popup
-        onSelectEvent={async (e) => {
+        onSelectEvent={async (e) => { // 기존 스케쥴 click event
           await setTargetInfo(e);
+          console.log(targetInfo);
           dispatch_checkModal({ type: "open" });
         }} // 기존 이벤트 확인
         onSelectSlot={async (e) => {
