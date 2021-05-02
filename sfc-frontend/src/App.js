@@ -1,5 +1,6 @@
 import React from "react";
 import { Route } from "react-router-dom";
+import Header from "./components/Header";
 import logo from "./logo.svg";
 import "./normalize.css";
 import "semantic-ui-css/semantic.min.css";
@@ -13,9 +14,10 @@ import GroupInfoPage from "./pages/GroupInfoPage";
 function App() {
   return (
     <div className="App">
-      <Route component={CalendarPage} path={"/"} exact />
       <Route component={LoginPage} path={"/login"} />
       <Route component={RegisterPage} path={"/register"} />
+
+      <Route component={CalendarPage} path={"/"} exact />
       <Route component={ProfilePage} path={"/profile"} />
       <Route component={GroupInfoPage} path={"/group"} />
     </div>
