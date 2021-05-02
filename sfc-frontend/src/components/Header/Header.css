@@ -1,4 +1,4 @@
-.header {
+.header__ {
   position: fixed;
   width: 100%;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
@@ -16,4 +16,8 @@
 
 .spacer {
   height: 7rem;
+}
+
+.Toastify__progress-bar--default {
+  background: linear-gradient(to right, #007aff, #34aadc, #5856d6);
 }
