@@ -17,3 +17,7 @@
 .spacer {
   height: 7rem;
 }
+
+.Toastify__progress-bar--default {
+  background: linear-gradient(to right, #007aff, #34aadc, #5856d6);
+}

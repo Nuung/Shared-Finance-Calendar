@@ -34,14 +34,22 @@
 }
 
 .Modal .content {
-    border-top: 1px solid #bebebe;
     margin-top: 16px;
 }
 
 .Modal .content p {
     padding: 8px;
-    font-size: 12pt;
+    font-size: 1.1rem;
     color: rgb(70, 69, 69);
+}
+
+.Modal-user__checkbox {
+    display: flex;
+    justify-content: center;
+}
+
+.Modal-user__checkbox>.checkbox {
+    margin: 5px;
 }
 
 .Modal .button-wrap {

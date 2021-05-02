@@ -50,7 +50,7 @@ const CalendarForm = () => {
   const date = moment().format("YYYY/M/D").split("/");
 
   useEffect(() => {
-    axios.get(`/api/schedule/${userId}?year=${date[0]}`).then((res) => {
+    axios.get(`http://3.35.6.3:3000/api/schedule/${userId}?year=${date[0]}`).then((res) => {
       const events = res.data.result.map((event) => {
         const eventObj = {
           title: event.memo,
