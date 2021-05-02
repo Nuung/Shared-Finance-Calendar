@@ -1,12 +1,17 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, forwardRef } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Button, Modal, Input, Item } from "semantic-ui-react";
+import { Button, Modal, Input, Item, Label } from "semantic-ui-react";
+import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import moment from "moment";
 import "moment/locale/ko";
+import ko from "date-fns/locale/ko";
 import axios from "axios";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-datepicker/dist/react-datepicker.css";
+import "./CalendarForm.css";
 
 moment.locale("ko");
+registerLocale("ko", ko);
 
 const localizer = momentLocalizer(moment);
 
@@ -35,6 +40,12 @@ function checkModalReducer(state, action) {
 const CalendarForm = () => {
   const [events, setEvents] = useState([]);
   const [targetInfo, setTargetInfo] = useState([]);
+
+  const [meetingName, setName] = useState("");
+  const [friend, setFriend] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   const [
     registrationModal,
     dispatch_registrationModal,
@@ -46,25 +57,29 @@ const CalendarForm = () => {
   const { open } = registrationModal;
   const { check_open } = checkModal;
 
-  const { userId } = JSON.parse(localStorage.getItem("userInfo")).result;
+  const { userId, account } = JSON.parse(
+    localStorage.getItem("userInfo")
+  ).result;
   const date = moment().format("YYYY/M/D").split("/");
 
   useEffect(() => {
-    axios.get(`http://3.35.6.3:3000/api/schedule/${userId}?year=${date[0]}`).then((res) => {
-      const events = res.data.result.map((event) => {
-        const eventObj = {
-          title: event.memo,
-          start: event.startTime,
-          end: event.endTime,
-          allDay: false,
-          // resource: "1234",
-        };
-        return eventObj;
-      });
+    axios
+      .get(`http://3.35.6.3:3000/api/schedule/${userId}?year=${date[0]}`)
+      .then((res) => {
+        const events = res.data.result.map((event) => {
+          const eventObj = {
+            title: event.memo,
+            start: event.startTime,
+            end: event.endTime,
+            allDay: false,
+            // resource: "1234",
+          };
+          return eventObj;
+        });
 
-      setEvents(events);
-    });
-  }, []);
+        setEvents(events);
+      });
+  }, [open, check_open]);
 
   return (
     <div className="Calendar__wrapper">
@@ -99,19 +114,52 @@ const CalendarForm = () => {
         <Modal.Header>더치페이 스케쥴 등록</Modal.Header>
         <Modal.Content>
           {/* userId, account, sharedUserId, startTime, endTime, memo */}
-          <Input label="모임 이름" placehoder="모임 이름을 적어주세요" />
+          <Input
+            label="모임 이름"
+            placehoder="모임 이름을 적어주세요"
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
           <br />
           <br />
           <Input
             label="더치페이할 대상"
             placehoder="친구 아이디를 적어주세요"
+            onChange={(e) => setFriend(e.target.value)}
           />
           <br />
           <br />
-          <Input label="시작시간" placehoder="시작시간을 적어주세요" />
+          <div>
+            <Label size="large">시작일</Label>
+            <DatePicker
+              className="calendar__datepicker"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              showTimeInput
+              dateFormat="yyyy.MM.dd(eee) p"
+              timeFormat="HH:mm"
+              timeInputLabel="Time:"
+              locale="ko"
+              popperModifiers={{ preventOverflow: { enabled: true } }}
+            />
+          </div>
           <br />
           <br />
-          <Input label="종료시간" placehoder="종료시간를 적어주세요" />
+          <div>
+            <Label size="large">종료일</Label>
+            <DatePicker
+              className="calendar__datepicker"
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              showTimeInput
+              dateFormat="yyyy.MM.dd(eee) p"
+              timeFormat="HH:mm"
+              timeInputLabel="Time:"
+              locale="ko"
+              popperModifiers={{ preventOverflow: { enabled: true } }}
+            />
+          </div>
         </Modal.Content>
         <Modal.Actions>
           <Button
@@ -124,6 +172,15 @@ const CalendarForm = () => {
             positive
             onClick={() => {
               // 이벤트 생성
+              axios.post("http://3.35.6.3:3000/api/schedule", {
+                userId: userId, // 유저아이디
+                account: account, // 계좌
+                sharedUserId: friend.split(","),
+                startTime: startDate,
+                endTime: endDate,
+                location: [37.663998, 127.978462],
+                memo: meetingName,
+              });
               return dispatch_registrationModal({ type: "close" });
             }}
           >
