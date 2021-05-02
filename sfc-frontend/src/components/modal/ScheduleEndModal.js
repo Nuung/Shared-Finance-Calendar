@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Checkbox, Button } from 'semantic-ui-react';
 import './ScheduleEndModal.css';
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import TransactionList from '../info/TransactionList/TransactionList'
 
 
@@ -33,7 +36,7 @@ const fetchEndSchedule = (props) => {
     }
 
     console.log(testProps);
-
+    toast.success(`${userList}에게 이체 요청이 완료되었습니다!!`);
     // request API
     /*
     const options = {
@@ -84,6 +87,7 @@ const ScheduleEndModal = ({ type }) => {
 
     return (
         <React.Fragment>
+            <ToastContainer />
             <div className="Modal-overlay" />
             <div className="Modal">
                 <p className="title">모임 종료</p>
