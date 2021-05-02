@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Menu } from "semantic-ui-react";
+import { Icon, Menu, Dropdown } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import "./Header.css";
@@ -7,14 +7,14 @@ import "./Header.css";
 const Header = () => {
   return (
     <>
-      <div className="header">
+      <div className="header__">
         <div className="header__wrapper">
           <div className="header__hamburger">
-            <Icon
-              name="align justify"
-              size="large"
-              onClick={() => console.log("메뉴가 열립니다")}
-            />
+            <Dropdown icon="align justify" size="large">
+              <Dropdown.Menu>
+                <Dropdown.Item text="Logout" />
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
           <div class="header__right">
             <Icon
