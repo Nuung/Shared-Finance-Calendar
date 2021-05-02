@@ -1,45 +1,45 @@
-import React, { useState, useReducer } from "react";
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
 import { Dropdown, Icon, Menu, Button, Modal } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./Header.css";
 
-
-// 모든 토스트 제거 
+// 모든 토스트 제거
 const dismissAll = () => toast.dismiss();
-const exampleReducer = (state, action) => { // 토스트 클릭 -> 모달 이벤트!
+const exampleReducer = (state, action) => {
+  // 토스트 클릭 -> 모달 이벤트!
   switch (action.type) {
-    case 'close':
-      return { open: false }
-    case 'open': {
+    case "close":
+      return { open: false };
+    case "open": {
       dismissAll(); // 모두 닫기
-      return { open: true, size: action.size, data: action.data }
+      return { open: true, size: action.size, data: action.data };
     }
 
     default:
-      throw new Error('Unsupported action...')
+      throw new Error("Unsupported action...");
   }
-}
+};
 
 // 스케쥴 정산하러 가즈아~!
 const fetchExcute = (data, account) => {
-
   // console.log(data);
   const options = {
-    method: 'PUT',
+    method: "PUT",
     url: `http://3.35.6.3:3000/api/alert`,
     data: {
-      alert_log_id: data['_id'],
+      alert_log_id: data["_id"],
       status: 1,
-      myAccount: account
-    }
+      myAccount: account,
+    },
   };
 
-  axios.request(options)
+  axios
+    .request(options)
     .then((res) => {
       console.log(res);
     })
@@ -50,22 +50,25 @@ const Header = () => {
   const [state, dispatch] = React.useReducer(exampleReducer, {
     open: false,
     size: undefined,
-    data: undefined
+    data: undefined,
   });
-  const { open, size, data } = state
+  const { open, size, data } = state;
 
   // status 가 0인 알람, 최근순 불러오기!! -> 그걸 Toast로 띄워주기!
   const fetchAlertLog = () => {
     const userInfo = JSON.parse(window.localStorage.userInfo);
-    axios.get(`http://3.35.6.3:3000/api/alert/${userInfo.result.userId}`)
+    axios
+      .get(`http://3.35.6.3:3000/api/alert/${userInfo.result.userId}`)
       .then((res) => {
         res.data.result.map((data) => {
-          const toastStr = `${data.fromUserId}님과 함께한 ${data.memo}스케쥴 **${parseInt(data.amount)}원** 이체해야합니다!`;
+          const toastStr = `${data.fromUserId}님과 함께한 ${
+            data.memo
+          }스케쥴 **${parseInt(data.amount)}원** 이체해야합니다!`;
           toast(String(toastStr), {
             pauseOnFocusLoss: true,
             closeButton: true,
             closeOnClick: true,
-            onClick: () => dispatch({ type: 'open', size: 'mini', data: data })
+            onClick: () => dispatch({ type: "open", size: "mini", data: data }),
             // onClick: () => fetchExcute(data, userInfo.result.account)
           });
         });
@@ -78,7 +81,7 @@ const Header = () => {
       <Modal
         size={size}
         open={open}
-        onClose={() => dispatch({ type: 'close' })}
+        onClose={() => dispatch({ type: "close" })}
       >
         <Modal.Header>이체하기</Modal.Header>
         <Modal.Content>
@@ -88,7 +91,7 @@ const Header = () => {
           </p>
         </Modal.Content>
         <Modal.Actions>
-          <Button negative onClick={() => dispatch({ type: 'close' })}>
+          <Button negative onClick={() => dispatch({ type: "close" })}>
             No
           </Button>
           <Button positive onClick={() => {
@@ -111,7 +114,7 @@ const Header = () => {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          <div class="header__right">
+          <div className="header__right">
             <Icon
               name="bell"
               size="large"
@@ -119,7 +122,6 @@ const Header = () => {
                 fetchAlertLog();
               }}
             />
-
           </div>
         </div>
 
