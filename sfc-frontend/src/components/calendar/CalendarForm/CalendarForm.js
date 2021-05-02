@@ -79,7 +79,7 @@ const CalendarForm = () => {
 
         setEvents(events);
       });
-  }, []);
+  }, [open, check_open]);
 
   return (
     <div className="Calendar__wrapper">
@@ -172,14 +172,6 @@ const CalendarForm = () => {
             positive
             onClick={() => {
               // 이벤트 생성
-              console.log(
-                userId,
-                account,
-                friend.split(","),
-                startDate,
-                endDate,
-                meetingName
-              );
               axios.post("http://3.35.6.3:3000/api/schedule", {
                 userId: userId, // 유저아이디
                 account: account, // 계좌
